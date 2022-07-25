@@ -39,6 +39,10 @@ class _ProfState extends State<Prof> {
     return Scaffold(
       backgroundColor: Colors.white10,
       body: CustomScrollView(
+
+
+
+        physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.transparent,
@@ -50,10 +54,13 @@ class _ProfState extends State<Prof> {
             //   title: Text('Basic Slivers'),
             // ),
           ),
-          SliverList(
-            // itemExtent: 400,
-
-            delegate: SliverChildListDelegate([
+          // SliverList(
+          //   // itemExtent: 400,
+          //
+          //
+          //   delegate:
+            SliverToBoxAdapter(
+              child:
               Column(
                 children: [
                   const SizedBox(
@@ -153,18 +160,31 @@ class _ProfState extends State<Prof> {
                   ),
                 ],
               ),
-            ]),
-          ),
+
+
+
+            ),
+
           SliverPinnedHeader(
               child: Container(
             height: 700,
             width: double.infinity,
             child: ContainedTabBarView(
+
               tabs: const [
                 Icon(Icons.add_box_sharp),
                 Icon(Icons.favorite),
               ],
               tabBarProperties: TabBarProperties(
+                indicator: BoxDecoration(
+
+                  border: Border(
+
+                  //  left: BorderSide(color: Colors.grey), // provides to left side
+                    right: BorderSide(color: Colors.grey), // for right side
+                  ),
+                ),
+
                 width: double.infinity,
                 height: 50,
                 background: Container(
@@ -192,7 +212,8 @@ class _ProfState extends State<Prof> {
                 Fav(),
               ],
             ),
-          )),
+          )
+          ),
         ],
       ),
     );
@@ -251,6 +272,8 @@ class All extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       child: GridView.builder(
+        //
+          physics: BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 7.0,
@@ -273,6 +296,9 @@ class Fav extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       child: GridView.builder(
+          // shrinkWrap: true,
+
+          physics: BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 7.0,
