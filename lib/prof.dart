@@ -4,6 +4,7 @@ import 'package:profile/remote_service.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import './profile.dart';
 
+
 class Prof extends StatefulWidget {
   const Prof({Key? key}) : super(key: key);
 
@@ -15,13 +16,22 @@ class _ProfState extends State<Prof> {
   List<Profile>? profiles;
   var isLoaded = false;
   int index = 0;
+  ScrollController controller= ScrollController();
+  bool closeTop=false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+
     getData();
+
+    controller.addListener(() {
+      setState((){
+        closeTop = controller.offset>50;
+      });
+    });
   }
 
   getData() async {
@@ -36,13 +46,11 @@ class _ProfState extends State<Prof> {
 
   @override
   Widget build(BuildContext context) {
+    final double height =MediaQuery.of(context).size.height*0.45;
     return Scaffold(
       backgroundColor: Colors.white10,
       body: CustomScrollView(
-
-
-
-        physics: BouncingScrollPhysics(),
+       // physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.transparent,
@@ -50,141 +58,148 @@ class _ProfState extends State<Prof> {
             floating: true,
             title: Text(profiles![index].username),
             centerTitle: true,
-            // flexibleSpace: FlexibleSpaceBar(
-            //   title: Text('Basic Slivers'),
-            // ),
+
           ),
           // SliverList(
           //   // itemExtent: 400,
           //
           //
           //   delegate:
-            SliverToBoxAdapter(
-              child:
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 50,
-                    child: Container(
-                      decoration:
-                          BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                        BoxShadow(
-                          color: Colors.purple.withOpacity(0.7),
-                          spreadRadius: 5,
-                          blurRadius: 2,
-                        ),
-                      ]),
-                      // padding: const EdgeInsets.all(3.0),
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                          profiles![index].profilePic,
-                        ),
-                      ),
+          SliverToBoxAdapter(
+            child: AnimatedContainer(
+              curve: Curves.fastOutSlowIn,
+              duration: Duration(milliseconds: 300,),
+              width:double.infinity,
+              transformAlignment: Alignment.center,
+
+
+              alignment: Alignment.center,
+              height: closeTop?0:height,
+
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    height: 130,
-                    //  clipBehavior: Clip.hardEdge,
-                    width: 250,
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      profiles![index].description,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white60),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Text('${profiles![index].likesCount}',
-                              style: TextStyle(color: Colors.white)),
-                          Text('Likes', style: TextStyle(color: Colors.white60))
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 45,
-                      ),
-                      Column(
-                        children: [
-                          Text('${profiles![index].followers}',
-                              style: const TextStyle(color: Colors.white)),
-                          const Text('Followers',
-                              style: TextStyle(color: Colors.white60))
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        children: [
-                          Text('${profiles![index].following}',
-                              style: const TextStyle(color: Colors.white)),
-                          const Text('Following',
-                              style: TextStyle(color: Colors.white60))
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                      height: 35,
-                      width: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(4)),
-                      child: FlatButton(
-                        onPressed: () {},
-                        color: Colors.black,
-                        child: const Text(
-                          'Edit profile',
-                          style: TextStyle(
-                            color: Colors.white,
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 50,
+                      child: Container(
+                        decoration:
+                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                          BoxShadow(
+                            color: Colors.purple.withOpacity(0.7),
+                            spreadRadius: 5,
+                            blurRadius: 2,
+                          ),
+                        ]),
+                        // padding: const EdgeInsets.all(3.0),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(
+                            profiles![index].profilePic,
                           ),
                         ),
-                      )),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      height: 130,
+                      //  clipBehavior: Clip.hardEdge,
+                      width: 250,
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        profiles![index].description,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white60),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Text('${profiles![index].likesCount}',
+                                style: TextStyle(color: Colors.white)),
+                            Text('Likes', style: TextStyle(color: Colors.white60))
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 45,
+                        ),
+                        Column(
+                          children: [
+                            Text('${profiles![index].followers}',
+                                style: const TextStyle(color: Colors.white)),
+                            const Text('Followers',
+                                style: TextStyle(color: Colors.white60))
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          children: [
+                            Text('${profiles![index].following}',
+                                style: const TextStyle(color: Colors.white)),
+                            const Text('Following',
+                                style: TextStyle(color: Colors.white60))
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                        height: 35,
+                        width: 130,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(4)),
+                        child: FlatButton(
+                          onPressed: () {},
+                          color: Colors.black,
+                          child: const Text(
+                            'Edit profile',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
               ),
-
-
-
             ),
+          ),
 
-          SliverPinnedHeader(
+          SliverToBoxAdapter(
               child: Container(
-            height: 700,
+            height: MediaQuery.of(context).size.height*0.9,
             width: double.infinity,
             child: ContainedTabBarView(
-
               tabs: const [
-                Icon(Icons.add_box_sharp),
+                Icon(
+                  Icons.add_box_sharp,
+                ),
                 Icon(Icons.favorite),
               ],
               tabBarProperties: TabBarProperties(
                 indicator: BoxDecoration(
-
                   border: Border(
-
-                  //  left: BorderSide(color: Colors.grey), // provides to left side
-                    right: BorderSide(color: Colors.grey), // for right side
+                    right: BorderSide(
+                        color: Colors.grey,
+                        style: BorderStyle.solid), // for right side
                   ),
                 ),
-
                 width: double.infinity,
                 height: 50,
                 background: Container(
@@ -207,13 +222,42 @@ class _ProfState extends State<Prof> {
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.grey[500],
               ),
-              views: const [
-                All(),
-                Fav(),
+              views:  [
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  child: GridView.builder(
+                      controller: controller,
+                      physics: BouncingScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 7.0,
+                          mainAxisSpacing: 7.0,
+                          childAspectRatio: 0.8),
+                      // shrinkWrap: true,
+                      itemCount: 23,
+                      itemBuilder: (context, index) {
+                        return Cards();
+                      }),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  child: GridView.builder(
+                      controller: controller,
+                      physics: BouncingScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 7.0,
+                          mainAxisSpacing: 7.0,
+                          childAspectRatio: 0.8),
+                      // shrinkWrap: true,
+                      itemCount: 23,
+                      itemBuilder: (context, index) {
+                        return Cards();
+                      }),
+                ),
               ],
             ),
-          )
-          ),
+          )),
         ],
       ),
     );
@@ -272,7 +316,7 @@ class All extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       child: GridView.builder(
-        //
+
           physics: BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:profile/prof.dart';
 import 'package:profile/profile.dart';
 import 'package:profile/remote_service.dart';
+import './profilepreui.dart';
 
 void main() {
-  runApp(const MaterialApp(home: Prof()));
+  runApp( MaterialApp(home:Prof()));
 }
 

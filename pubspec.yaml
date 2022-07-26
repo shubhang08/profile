@@ -38,6 +38,7 @@ dependencies:
   cached_network_image: ^3.2.1
   http: ^0.13.4
   sliver_tools: ^0.2.7
+  dotted_border: ^2.0.0+2
 
 dev_dependencies:
   flutter_test:
